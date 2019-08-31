@@ -2,10 +2,24 @@
 #include "config.h"
 #include <QRandomGenerator>
 
+/**
+* Constructor of Bite: sets it's color.
+*
+* @param color: the color of the bite
+*/
 Bite::Bite(QColor color) :
     color(color) {}
 
-void Bite::regenerate(Snake snake) {
+/**
+* Regenerates the bite on the board. Searches for a place that's not the same as before,
+* then checks if it collides with the snake. In this case, it tries the place right, checks
+* collision, etc. If it reaches the right side of the board, then tries the row below,
+* on the left side of the board. If it reaches the end, then it starts again from the top left
+* corner.
+*
+* @param snake: the snake of the board
+*/
+void Bite::regenerate(Snake &snake) {
     int newX = this->x();
     do {
         newX = QRandomGenerator::system()->bounded(config::dimension::width);
@@ -29,4 +43,3 @@ void Bite::regenerate(Snake snake) {
         }
     }
 }
-

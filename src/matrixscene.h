@@ -9,8 +9,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QList>
-#include "snake.h"
-#include "bite.h"
+#include "board.h"
 
 class MatrixScene : public QGraphicsScene {
   Q_OBJECT
@@ -18,15 +17,18 @@ class MatrixScene : public QGraphicsScene {
 public:
     MatrixScene(QObject *parent = nullptr);
 
+public slots:
+    void endGame();
+
 private:
     Frame out;
     QImage frame;
     QPainter painter;
     MUEBTransmitter transmitter;
     int timerID;
+    bool gameOver = false;
 
-    Snake snake;
-    Bite bite;
+    Board board;
 
   // QObject interface
 protected:

@@ -5,13 +5,14 @@
 #include <QColor>
 #include "snake.h"
 
+class Snake;
+
 class Bite : public QPoint {
-private:
+public:
     QColor color;
 
-public:
     Bite(QColor);
-    void regenerate(Snake snake);
+    void regenerate(Snake &snake);
 };
 
 #endif // BITE_H

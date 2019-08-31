@@ -7,9 +7,7 @@ MatrixScene::MatrixScene(QObject *parent)
       frame(config::dimension::width,
             config::dimension::height,
             QImage::Format_RGB888),
-      painter(&frame),
-      snake(Qt::green),
-      bite(Qt::red)
+      painter(&frame)
 {
 
     // set BG
@@ -29,39 +27,37 @@ MatrixScene::MatrixScene(QObject *parent)
     transmitter.sendFrame(out);
 
     // init Timer
-    timerID = startTimer(config::gameSpeed::query);
+    timerID = startTimer(config::game::query);
 
     // init Map
-    snake.init(config::dimension::width / 2,
-               config::dimension::height / 2,
-               3);
-    bite.regenerate(snake);
-    snake.setBiteCoords(bite.x(), bite.y());
+    board.setPos(0,0);
+    board.init();
+    addItem(&board);
+
+    connect(&board, &Board::finished, this, &MatrixScene::endGame);
 }
+
+void MatrixScene::endGame() {
+    gameOver = true;
+    killTimer(timerID);
+    addRect(0, 0, 32, 26, Qt::NoPen, Qt::black);
+    auto text = addText("Game over", QFont("Times", 10, QFont::Bold));
+    text->setPos(2, -5);
+}
+
 
 // Main event loop
 void MatrixScene::timerEvent(QTimerEvent *event) {
     Q_UNUSED(event)
 
-    // TODO!!: ask server where to go
-    Direction dir(Direction::UP);
+    if (!gameOver) {
+        // TODO!!: ask server where to go
+        Direction dir(Direction::UP);
 
-    // Move
-    bool regenerateBite = snake.move(dir);
-    if (regenerateBite) {
-        bite.regenerate(snake);
-        snake.setBiteCoords(bite.x(), bite.y());
+        // Move
+        board.move(dir);
     }
 
     render(&painter);
-    for (size_t x = 0; x < out.pixels.getWidth(); x++) {
-      for (size_t y = 0; y < out.pixels.getHeight(); y++) {
-        auto pixel = frame.pixelColor(static_cast<int>(x), static_cast<int>(y));
-        out.pixels(x, y) = Color( static_cast<uint8_t>(pixel.red()),
-                                  static_cast<uint8_t>(pixel.green()),
-                                  static_cast<uint8_t>(pixel.blue())
-                                  );
-      }
-    }
     transmitter.sendFrame(out);
 }

@@ -24,6 +24,7 @@ CONFIG += c++11
 
 SOURCES += \
         src/bite.cpp \
+        src/board.cpp \
         src/config.cpp \
         src/main.cpp \
         src/mainwindow.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
 
 HEADERS += \
         src/bite.h \
+        src/board.h \
         src/config.h \
         src/direction.h \
         src/mainwindow.h \
