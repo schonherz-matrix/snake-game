@@ -56,3 +56,5 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/matrix-simp
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/matrix-simple/mueb/release/mueb.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/matrix-simple/mueb/debug/mueb.lib
 else:unix: PRE_TARGETDEPS += $$PWD/matrix-simple/mueb/libmueb.a
+
+unix:  LIBS += -L$$PWD/matrix-simple/mueb/ -lmueb
