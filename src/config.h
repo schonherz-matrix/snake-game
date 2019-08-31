@@ -2,6 +2,7 @@
 #define CONFIG_H
 
 #include <QColor>
+#include <QUrl>
 
 namespace config{
     using tick = unsigned;
@@ -9,6 +10,7 @@ namespace config{
     namespace game {
         const extern tick query; /**< Time between two query (given in ms) */
         const extern int maxLength; /**< Maximum length the snake can reach before the game ends*/
+        const extern QUrl url;
     }
 
     namespace dimension {

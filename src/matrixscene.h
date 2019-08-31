@@ -9,7 +9,9 @@
 #include <QPainter>
 #include <QTimer>
 #include <QList>
+#include <QNetworkAccessManager>
 #include "board.h"
+
 
 class MatrixScene : public QGraphicsScene {
   Q_OBJECT
@@ -19,12 +21,14 @@ public:
 
 public slots:
     void endGame();
+    void makeMove(QNetworkReply *reply);
 
 private:
     Frame out;
     QImage frame;
     QPainter painter;
     MUEBTransmitter transmitter;
+    QNetworkAccessManager manager;
     int timerID;
     bool gameOver = false;
 

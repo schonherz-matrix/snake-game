@@ -7,7 +7,7 @@
 TARGET = matrix-snake-game
 TEMPLATE = app
 
-QT += core gui network gamepad widgets multimedia
+QT += core gui network widgets
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
