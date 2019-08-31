@@ -1,0 +1,3 @@
+[submodule "matrix-simple"]
+	path = matrix-simple
+	url = git@git.sch.bme.hu:matrix-group/matrix-simple.git
