@@ -23,16 +23,6 @@ MatrixScene::MatrixScene(QObject *parent)
     // setSize
     setSceneRect(0, 0, config::dimension::width, config::dimension::height);
 
-    // init Frame
-    out.pixels = Array2D<Color>(config::dimension::width, config::dimension::height);
-    frame.fill(Qt::black);
-    for (size_t x = 0; x < out.pixels.getWidth(); x++) {
-        for (size_t y = 0; y < out.pixels.getHeight(); y++) {
-          out.pixels(x, y) = Color(0, 0, 0);
-        }
-    }
-    transmitter.sendFrame(out);
-
     // init Timer
     timerID = startTimer(config::game::query);
 
@@ -66,7 +56,7 @@ void MatrixScene::endGame() {
     addItem(text);
 
     render(&painter);
-    transmitter.sendFrame(out);
+    transmitter.sendFrame(frame);
 }
 
 /**
@@ -124,7 +114,7 @@ void MatrixScene::makeMove(QNetworkReply *reply) {
     board.move(dir);
 
     render(&painter);
-    transmitter.sendFrame(out);
+    transmitter.sendFrame(frame);
 }
 
 

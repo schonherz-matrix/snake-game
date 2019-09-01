@@ -1,7 +1,6 @@
 #ifndef MATRIXSCENE_H
 #define MATRIXSCENE_H
 
-#include <common/frame.h>
 #include <muebtransmitter.h>
 #include <QGraphicsScene>
 #include <QImage>
@@ -24,7 +23,6 @@ public slots:
     void makeMove(QNetworkReply *reply);
 
 private:
-    Frame out;
     QImage frame;
     QPainter painter;
     MUEBTransmitter transmitter;
