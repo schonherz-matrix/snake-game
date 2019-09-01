@@ -7,7 +7,7 @@
 #include <QGraphicsObject>
 #include "direction.h"
 
-class Snake {
+class Snake : public QObject{
     Q_OBJECT
 
 private:
