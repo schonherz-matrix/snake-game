@@ -7,6 +7,8 @@
 #include <QJsonObject>
 #include <QVariantMap>
 #include <QNetworkReply>
+#include <QGraphicsPixmapItem>
+#include <QLabel>
 #include "config.h"
 
 MatrixScene::MatrixScene(QObject *parent)
@@ -36,27 +38,32 @@ MatrixScene::MatrixScene(QObject *parent)
     // init networking
     connect(&manager, &QNetworkAccessManager::finished,
             this, &MatrixScene::makeMove);
+
+    render(&painter);
+    transmitter.sendFrame(frame);
 }
 
 /**
 * Ends the game: kills the timer, prints out a big "Game over" sign
 */
 void MatrixScene::endGame() {
+    qDebug() << "Ending game...\n";
+
     gameOver = true;
     killTimer(timerID);
-    addRect(0, 0, 32, 26, Qt::NoPen, Qt::black);
+    qDebug() << "Timer killed.\n";
 
-    QFont font("Times", 10, QFont::Bold);
+    QPixmap pix;
+    if(pix.load(":/images/gameover.png")){
+        addPixmap(pix);
+        qDebug() << "Pixmap added.\n";
+        render(&painter);
+        transmitter.sendFrame(frame);
+        qDebug() << "Now you should see it on the emulator.\n";
 
-    QGraphicsTextItem* text = new QGraphicsTextItem();
-    text->setPos(2, 5);
-    text->setFont(font);
-    text->setPlainText("Game over");
-
-    addItem(text);
-
-    render(&painter);
-    transmitter.sendFrame(frame);
+    } else {
+        qDebug() << "Error while loading pixmap!";
+    }
 }
 
 /**
@@ -69,7 +76,8 @@ void MatrixScene::makeMove(QNetworkReply *reply) {
     Direction dir = Direction::UP;
 
     if (reply->error()) {
-        qDebug() << "Error occured in request\n";
+        qDebug() << "Error occured in request:\n";
+        qDebug() << reply->errorString() << "\n";
         return;
     }
 
