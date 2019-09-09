@@ -54,15 +54,28 @@ void MatrixScene::endGame() {
     qDebug() << "Timer killed.\n";
 
     QPixmap pix;
-    if(pix.load(":/images/gameover.png")){
-        addPixmap(pix);
-        qDebug() << "Pixmap added.\n";
-        render(&painter);
-        transmitter.sendFrame(frame);
-        qDebug() << "Now you should see it on the emulator.\n";
+    if (board.isWin()) {
+        if(pix.load(":/images/win.png")){
+            addPixmap(pix);
+            qDebug() << "Pixmap added.\n";
+            render(&painter);
+            transmitter.sendFrame(frame);
+            qDebug() << "Now you should see it on the emulator.\n";
 
+        } else {
+            qDebug() << "Error while loading pixmap!";
+        }
     } else {
-        qDebug() << "Error while loading pixmap!";
+        if(pix.load(":/images/gameover.png")){
+            addPixmap(pix);
+            qDebug() << "Pixmap added.\n";
+            render(&painter);
+            transmitter.sendFrame(frame);
+            qDebug() << "Now you should see it on the emulator.\n";
+
+        } else {
+            qDebug() << "Error while loading pixmap!";
+        }
     }
 }
 

@@ -54,6 +54,13 @@ void Board::restart() {
 }
 
 /**
+* Returns if game is a win, which means the snake got to it's maximum length
+*/
+bool Board::isWin() {
+    return snake.getLength() == config::game::maxLength;
+}
+
+/**
 * The board got a signal that the snake hit itself, so the game is over.
 */
 void Board::snakeHitItself() {

@@ -24,6 +24,7 @@ public:
     void init();
     void move(Direction dir);
     void restart();
+    bool isWin();
 
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
