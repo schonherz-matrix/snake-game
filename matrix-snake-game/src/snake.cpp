@@ -2,6 +2,7 @@
 #include "config.h"
 #include <stdexcept>
 #include <QPainter>
+#include <QDebug>
 
 Snake::Snake(QColor color) :
     color(color) {}
@@ -11,12 +12,9 @@ Snake::Snake(QColor color) :
 * Then length can also be given.
 */
 void Snake::init(int x, int y, unsigned length) {
-    if (y < length) {
-        throw std::invalid_argument("Length must be less or equal to y.");
-    }
-
+    // Please don't give idiot parameters
     for (unsigned i = 0; i < length; i++) {
-        QPoint point(x, y-i);
+        QPoint point(x, y+i);
         this->body.push_back(point);
     }
 }
@@ -36,6 +34,8 @@ void Snake::clean() {
 * @return true, if the snake hit a bite.
 */
 bool Snake::move(Direction dir) {
+    qDebug() << "Current coords: x = " << body[0].x() << "; y = " << body[0].y() << "\n";
+
     switch (dir) {
         case Direction::UP:
             // if snake is already on the top
@@ -115,6 +115,8 @@ int Snake::getLength() {
 * @return true, if the snake hit a bite.
 */
 bool Snake::advance(int x, int y) {
+    qDebug() << "Next coords: x = " << x << "; y = " << y << "\n";
+
     if (this->collides(x, y)) {
         emit hitMyself();
         return false;

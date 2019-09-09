@@ -91,6 +91,11 @@ void MatrixScene::makeMove(QNetworkReply *reply) {
     int leftVotes = dataMap["left"].toInt();
     int rightVotes = dataMap["right"].toInt();
 
+    qDebug() << "Votes: \nUp: " << upVotes
+             << "\nDown: " << downVotes
+             << "\nRight: " << rightVotes
+             << "\nLeft: " << leftVotes << "\n";
+
     if (upVotes >= downVotes
             && upVotes >= leftVotes
             && upVotes >= rightVotes) {
