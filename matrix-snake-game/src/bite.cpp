@@ -20,14 +20,14 @@ Bite::Bite(QColor color) :
 * @param snake: the snake of the board
 */
 void Bite::regenerate(Snake &snake) {
-    int newX = this->x();
+    int newX;
     do {
-        newX = QRandomGenerator::system()->bounded(config::dimension::width);
+        newX = QRandomGenerator::global()->bounded(0, config::dimension::width);
     } while (newX == this->x());
 
-    int newY = this->y();
+    int newY;
     do {
-        newY = QRandomGenerator::system()->bounded(config::dimension::height);
+        newY = QRandomGenerator::global()->bounded(0, config::dimension::height);
     } while (newY == this->y());
 
     while (snake.collides(newX, newY)) {
@@ -42,4 +42,7 @@ void Bite::regenerate(Snake &snake) {
             newX++;
         }
     }
+
+    this->_x = newX;
+    this->_y = newY;
 }

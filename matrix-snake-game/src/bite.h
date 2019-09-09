@@ -7,9 +7,15 @@
 
 class Snake;
 
-class Bite : public QPoint {
+class Bite {
+private:
+    int _x;
+    int _y;
+
 public:
     QColor color;
+    int x() { return _x; }
+    int y() { return _y; }
 
     Bite(QColor);
     void regenerate(Snake &snake);

@@ -40,14 +40,14 @@ bool Snake::move(Direction dir) {
         case Direction::UP:
             // if snake is already on the top
             if (body[0].y() == 0) {
-                return advance(body[0].x(), config::dimension::height);
+                return advance(body[0].x(), config::dimension::height-1);
             } else {
                 return advance(body[0].x(), body[0].y()-1);
             }
 
         case Direction::DOWN:
             // if snake is already on the bottom
-            if (body[0].y() == config::dimension::height) {
+            if (body[0].y() == config::dimension::height-1) {
                 return advance(body[0].x(), 0);
             } else {
                 return advance(body[0].x(), body[0].y()+1);
@@ -56,14 +56,14 @@ bool Snake::move(Direction dir) {
         case Direction::LEFT:
             // if snake is already on the left
             if (body[0].x() == 0) {
-                return advance(config::dimension::width, body[0].y());
+                return advance(config::dimension::width-1, body[0].y());
             } else {
                 return advance(body[0].x()-1, body[0].y());
             }
 
         case Direction::RIGHT:
             // if snake is already on the right
-            if (body[0].x() == config::dimension::width) {
+            if (body[0].x() == config::dimension::width-1) {
                 return advance(0, body[0].y());
             } else {
                 return advance(body[0].x()+1, body[0].y());
