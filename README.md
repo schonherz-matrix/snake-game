@@ -2,6 +2,7 @@
 
 ## Előfeltételek
 Qt: 5.12.4
+
 OpenSSL: 1.1.1
 
 ## Fordítás
