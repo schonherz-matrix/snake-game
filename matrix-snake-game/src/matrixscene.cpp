@@ -153,7 +153,6 @@ void MatrixScene::timerEvent(QTimerEvent *event) {
 
     if (!gameOver) {
         QNetworkRequest request(config::game::url);
-        request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
         manager.get(request);
     }
 }
