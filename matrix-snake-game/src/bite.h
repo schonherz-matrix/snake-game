@@ -9,6 +9,10 @@ class Snake;
 
 class Bite {
 private:
+    // Coordinates of the bite:
+    // (x-1, y-1) (x, y-1)
+    // (x, y-1)   (x, y)
+
     int _x;
     int _y;
 
@@ -19,6 +23,8 @@ public:
 
     Bite(QColor);
     void regenerate(Snake &snake);
+    bool collide(int x, int y);
+    void paint(QPainter *painter);
 };
 
 #endif // BITE_H

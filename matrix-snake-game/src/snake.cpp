@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <QPainter>
 #include <QDebug>
+#include "bite.h"
 
 Snake::Snake(QColor color) :
     color(color) {}
@@ -91,12 +92,10 @@ bool Snake::collides(int x, int y) {
 /**
 * Sets the coordinates of the bite
 *
-* @param x: the x coordinate of the bite
-* @param y: the y coordinate of the bite
+* @param bite: the reference of the bite on
 */
-void Snake::setBiteCoords(int x, int y) {
-    this->biteX = x;
-    this->biteY = y;
+void Snake::setBite(Bite* bite) {
+    this->bite = bite;
 }
 
 /**
@@ -121,7 +120,7 @@ bool Snake::advance(int x, int y) {
         emit hitMyself();
         return false;
     } else {
-        if (biteX == x && biteY == y) {
+        if (this->bite->collide(x, y)) {
             body.push_front(QPoint(x, y));
             return true;
         } else {

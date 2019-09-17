@@ -7,13 +7,15 @@
 #include <QGraphicsObject>
 #include "direction.h"
 
+class Bite;
+
 class Snake : public QObject{
     Q_OBJECT
 
 private:
     std::deque<QPoint> body;
     QColor color;
-    int biteX, biteY;
+    Bite* bite;
 
 signals:
     void hitMyself();
@@ -25,7 +27,7 @@ public:
 
     bool move(Direction dir);
     bool collides(int x, int y);
-    void setBiteCoords(int x, int y);
+    void setBite(Bite* bite);
     int getLength();
     bool advance(int x, int y);
 
