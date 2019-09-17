@@ -32,6 +32,19 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QSlider" name="slider">
+      <property name="maximum">
+       <number>40</number>
+      </property>
+      <property name="sliderPosition">
+       <number>20</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -58,4 +71,3 @@
  <resources/>
  <connections/>
 </ui>
-

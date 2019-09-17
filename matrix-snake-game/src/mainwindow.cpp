@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->graphicsView->setScene(&scene);
     ui->graphicsView->scale(10, 10);
+    scene.setSlider(ui->slider);
 }
 
 MainWindow::~MainWindow()

@@ -10,6 +10,7 @@
 #include <QList>
 #include <QNetworkAccessManager>
 #include "board.h"
+#include <QSlider>
 
 
 class MatrixScene : public QGraphicsScene {
@@ -17,24 +18,24 @@ class MatrixScene : public QGraphicsScene {
 
 public:
     MatrixScene(QObject *parent = nullptr);
+    void setSlider(QSlider* slider);
 
 public slots:
     void endGame();
     void makeMove(QNetworkReply *reply);
+    void resetTimerInterval(int time);
+    void timerTick();
 
 private:
     QImage frame;
     QPainter painter;
     MUEBTransmitter transmitter;
     QNetworkAccessManager manager;
-    int timerID;
+    QTimer timer;
     bool gameOver = false;
 
     Board board;
-
-  // QObject interface
-protected:
-    void timerEvent(QTimerEvent *event) override;
+    QSlider* slider;
 };
 
 #endif // MATRIXSCENE_H

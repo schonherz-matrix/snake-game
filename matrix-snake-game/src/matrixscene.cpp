@@ -16,7 +16,8 @@ MatrixScene::MatrixScene(QObject *parent)
       frame(config::dimension::width,
             config::dimension::height,
             QImage::Format_RGB888),
-      painter(&frame)
+      painter(&frame),
+      timer()
 {
 
     // set BG
@@ -26,7 +27,8 @@ MatrixScene::MatrixScene(QObject *parent)
     setSceneRect(0, 0, config::dimension::width, config::dimension::height);
 
     // init Timer
-    timerID = startTimer(config::game::query);
+    timer.start(config::game::query);
+    connect(&timer, &QTimer::timeout, this, &MatrixScene::timerTick);
 
     // init Map
     board.setPos(0,0);
@@ -50,7 +52,7 @@ void MatrixScene::endGame() {
     qDebug() << "Ending game...\n";
 
     gameOver = true;
-    killTimer(timerID);
+    timer.stop();
     qDebug() << "Timer killed.\n";
 
     QPixmap pix;
@@ -143,14 +145,31 @@ void MatrixScene::makeMove(QNetworkReply *reply) {
     transmitter.sendFrame(frame);
 }
 
+/**
+* Resets the timer's interval to the new given value.
+* 0 = 0 ms
+* 20 = 800 ms
+* 40 = 1600 ms
+*/
+void MatrixScene::resetTimerInterval(int time) {
+    timer.setInterval(1600-time*40);
+}
+
+/**
+* Sets the slider of the window.
+*
+* @param slider
+*/
+void MatrixScene::setSlider(QSlider *slider) {
+    this->slider = slider;
+    connect(slider, &QSlider::valueChanged, this, &MatrixScene::resetTimerInterval);
+}
 
 /**
 * Main event loop. On every tick, if it's not game over yet,
 * it creates a GET request to the backend to find out the next direction.
 */
-void MatrixScene::timerEvent(QTimerEvent *event) {
-    Q_UNUSED(event)
-
+void MatrixScene::timerTick() {
     if (!gameOver) {
         QNetworkRequest request(config::game::url);
         manager.get(request);
