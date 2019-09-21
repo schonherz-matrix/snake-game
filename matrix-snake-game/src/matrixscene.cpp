@@ -1,5 +1,4 @@
 #include "matrixscene.h"
-#include <iostream>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QRandomGenerator>
@@ -8,8 +7,8 @@
 #include <QVariantMap>
 #include <QNetworkReply>
 #include <QGraphicsPixmapItem>
-#include <QLabel>
 #include "config.h"
+#include "direction.h"
 
 MatrixScene::MatrixScene(QObject *parent)
     : QGraphicsScene(parent),
@@ -33,6 +32,7 @@ MatrixScene::MatrixScene(QObject *parent)
     // init Map
     board.setPos(0,0);
     board.init();
+    this->currentDir = Direction::UP;
     addItem(&board);
 
     connect(&board, &Board::finished, this, &MatrixScene::endGame);
@@ -88,8 +88,6 @@ void MatrixScene::endGame() {
 */
 void MatrixScene::makeMove(QNetworkReply *reply) {
     // Get the direction from the answer
-    Direction dir = Direction::UP;
-
     if (reply->error()) {
         qDebug() << "Error occured in request:\n";
         qDebug() << reply->errorString() << "\n";
@@ -98,48 +96,84 @@ void MatrixScene::makeMove(QNetworkReply *reply) {
 
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
     QJsonObject jObject = doc.object();
+    qDebug() << jObject << "\n";
+
     QVariantMap mainMap = jObject.toVariantMap();
     QVariantMap dataMap = mainMap["directions"].toMap();
 
-    int upVotes = dataMap["up"].toInt();
-    int downVotes = dataMap["down"].toInt();
-    int leftVotes = dataMap["left"].toInt();
-    int rightVotes = dataMap["right"].toInt();
+    std::map<Direction, int> directions;
+    std::map<Direction, int>::iterator it = directions.begin();
 
-    qDebug() << "Votes: \nUp: " << upVotes
-             << "\nDown: " << downVotes
-             << "\nRight: " << rightVotes
-             << "\nLeft: " << leftVotes << "\n";
+    directions.insert(it, std::pair<Direction, int>(Direction::UP, dataMap["up"].toInt()));
+    directions.insert(it, std::pair<Direction, int>(Direction::DOWN, dataMap["down"].toInt()));
+    directions.insert(it, std::pair<Direction, int>(Direction::LEFT, dataMap["left"].toInt()));
+    directions.insert(it, std::pair<Direction, int>(Direction::RIGHT, dataMap["right"].toInt()));
 
-    if (upVotes >= downVotes
-            && upVotes >= leftVotes
-            && upVotes >= rightVotes) {
+    qDebug() << "Votes: \nUp: " << directions[Direction::UP]
+             << "\nDown: " << directions[Direction::DOWN]
+             << "\nLeft: " << directions[Direction::LEFT]
+             << "\nRight: " << directions[Direction::RIGHT] << "\n";
 
-        dir = Direction::UP;
+    int maxVotes = 0;
+    for (int i = 0; i < 4; i++) {
+        if (Direction(i) == oppositeDir(currentDir)) {
+            qDebug() << "Direction " << i << " skipped." << "\n";
+            continue;
+        }
+        if (directions[Direction(i)] > maxVotes) {
+            maxVotes = directions[Direction(i)];
+        }
+    }
+
+    qDebug() << "Maximum votes: " << maxVotes << "\n";
+
+    std::vector<Direction> equalDirs;
+
+    for (int i = 0; i < 4; i++) {
+        if (Direction(i) == oppositeDir(currentDir)) {
+            continue;
+        }
+        if (directions[Direction(i)] == maxVotes) equalDirs.push_back(Direction(i));
+    }
+
+    qDebug() << "Directions with this number of votes:\n";
+    for (int i = 0; i < equalDirs.size(); i++) {
+        switch (equalDirs[i]) {
+        case Direction::LEFT:
+            qDebug() << "LEFT" << "\n";
+            break;
+        case Direction::UP:
+            qDebug() << "UP" << "\n";
+            break;
+        case Direction::DOWN:
+            qDebug() << "DOWN" << "\n";
+            break;
+        case Direction::RIGHT:
+            qDebug() << "RIGHT" << "\n";
+            break;
+        }
+    }
+
+    int newDirIndex = 0;
+    if (equalDirs.size() > 1) {
+        newDirIndex = QRandomGenerator::global()->bounded(0, equalDirs.size());
+    }
+
+    Direction newDir = equalDirs[newDirIndex];
+
+    if (newDir == Direction::UP) {
         qDebug() << "New direction: UP\n";
-
-    } else if (downVotes >= upVotes
-               && downVotes >= leftVotes
-               && downVotes >= rightVotes) {
-
-        dir = Direction::DOWN;
+    } else if (newDir == Direction::DOWN) {
         qDebug() << "New direction: DOWN\n";
-
-    } else if (leftVotes >= upVotes
-               && leftVotes >= downVotes
-               && leftVotes >= rightVotes) {
-
-        dir = Direction::LEFT;
+    } else if (newDir == Direction::LEFT) {
         qDebug() << "New direction: LEFT\n";
-
     } else {
-
-        dir = Direction::RIGHT;
         qDebug() << "New direction: RIGHT\n";
     }
 
     // Move
-    board.move(dir);
+    board.move(newDir);
+    this->currentDir = newDir;
 
     render(&painter);
     transmitter.sendFrame(frame);
@@ -173,5 +207,17 @@ void MatrixScene::timerTick() {
     if (!gameOver) {
         QNetworkRequest request(config::game::url);
         manager.get(request);
+    }
+}
+
+/**
+* Returns the opposite direction of the given direction.
+*/
+Direction MatrixScene::oppositeDir(Direction dir) {
+    switch (dir) {
+        case Direction::UP: return Direction::DOWN;
+        case Direction::DOWN: return Direction::UP;
+        case Direction::LEFT: return Direction::RIGHT;
+        case Direction::RIGHT: return Direction::LEFT;
     }
 }

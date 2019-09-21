@@ -23,12 +23,12 @@ Bite::Bite(QColor color) :
 void Bite::regenerate(Snake &snake) {
     int newX;
     do {
-        newX = QRandomGenerator::global()->bounded(0, (config::dimension::width/2)-1)*2 + 1;
+        newX = QRandomGenerator::global()->bounded(0, (config::dimension::width/2))*2 + 1;
     } while (newX == this->x());
 
     int newY;
     do {
-        newY = QRandomGenerator::global()->bounded(0, (config::dimension::height/2)-1)*2 + 1;
+        newY = QRandomGenerator::global()->bounded(0, (config::dimension::height/2))*2 + 1;
     } while (newY == this->y());
 
     while (snake.collides(newX, newY)

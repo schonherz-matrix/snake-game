@@ -33,9 +33,12 @@ private:
     QNetworkAccessManager manager;
     QTimer timer;
     bool gameOver = false;
+    Direction currentDir;
 
     Board board;
     QSlider* slider;
+
+    Direction oppositeDir(Direction);
 };
 
 #endif // MATRIXSCENE_H
