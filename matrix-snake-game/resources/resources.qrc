@@ -3,5 +3,7 @@
         <file>gameover.png</file>
         <file>win.png</file>
     </qresource>
-    <qresource prefix="/"/>
+    <qresource prefix="/sounds">
+        <file>bite.wav</file>
+    </qresource>
 </RCC>

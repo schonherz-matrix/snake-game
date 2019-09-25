@@ -63,5 +63,12 @@ else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PW
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../emu/mueb/debug/mueb.lib
 else:unix: PRE_TARGETDEPS += $$OUT_PWD/../emu/mueb/libmueb.a
 
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../SFML/lib/ -lsfml-audio -lsfml-system -lsfml-window
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../SFML/lib/ -lsfml-audio-d -lsfml-system-d -lsfml-window-d
+else:unix: LIBS += -L$$OUT_PWD/../SFML/lib/ -lsfml-audio -lsfml-system -lsfml-window
+
+INCLUDEPATH += $$PWD/../SFML/include
+DEPENDPATH += $$PWD/../SFML/include
+
 RESOURCES += \
     resources/resources.qrc

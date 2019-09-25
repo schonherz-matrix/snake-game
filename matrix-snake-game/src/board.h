@@ -14,6 +14,7 @@ private:
 
 signals:
     void finished();
+    void biteTaken();
 
 public slots:
     void snakeHitItself();

@@ -11,6 +11,7 @@
 #include <QNetworkAccessManager>
 #include "board.h"
 #include <QSlider>
+#include <SFML/Audio.hpp>
 
 
 class MatrixScene : public QGraphicsScene {
@@ -25,6 +26,7 @@ public slots:
     void makeMove(QNetworkReply *reply);
     void resetTimerInterval(int time);
     void timerTick();
+    void playBiteSound();
 
 private:
     QImage frame;
@@ -34,6 +36,8 @@ private:
     QTimer timer;
     bool gameOver = false;
     Direction currentDir;
+    sf::SoundBuffer soundBuffer;
+    sf::Sound biteSound;
 
     Board board;
     QSlider* slider;

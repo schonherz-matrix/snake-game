@@ -19,10 +19,6 @@
 *.dll
 *.dylib
 
-# Unignoring two really important dlls
-!ssleay32.dll
-!libeay32.dll
-
 # Qt-es
 object_script.*.Release
 object_script.*.Debug

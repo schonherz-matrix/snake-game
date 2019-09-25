@@ -9,6 +9,8 @@
 #include <QGraphicsPixmapItem>
 #include "config.h"
 #include "direction.h"
+#include <SFML/Audio.hpp>
+
 
 MatrixScene::MatrixScene(QObject *parent)
     : QGraphicsScene(parent),
@@ -16,7 +18,9 @@ MatrixScene::MatrixScene(QObject *parent)
             config::dimension::height,
             QImage::Format_RGB888),
       painter(&frame),
-      timer()
+      timer(),
+      soundBuffer(),
+      biteSound()
 {
 
     // set BG
@@ -43,6 +47,15 @@ MatrixScene::MatrixScene(QObject *parent)
 
     render(&painter);
     transmitter.sendFrame(frame);
+
+    // init sound
+    if (soundBuffer.loadFromFile("resources/bite.wav")) {
+        qDebug() << "Sound loaded successfully!\n";
+    } else {
+        qDebug() << "Could not load sound!\n";
+    }
+    biteSound.setBuffer(soundBuffer);
+    connect(&board, &Board::biteTaken, this, &MatrixScene::playBiteSound);
 }
 
 /**
@@ -197,6 +210,14 @@ void MatrixScene::resetTimerInterval(int time) {
 void MatrixScene::setSlider(QSlider *slider) {
     this->slider = slider;
     connect(slider, &QSlider::valueChanged, this, &MatrixScene::resetTimerInterval);
+}
+
+/**
+* Plays bite sound.
+*/
+void MatrixScene::playBiteSound() {
+    biteSound.setBuffer(soundBuffer);
+    biteSound.play();
 }
 
 /**

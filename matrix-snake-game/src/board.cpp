@@ -32,6 +32,7 @@ void Board::init() {
 void Board::move(Direction dir) {
     bool regenerateBite = snake.move(dir);
     if (regenerateBite) {
+        emit biteTaken();
         if (snake.getLength() == config::game::maxLength) {
             emit finished();
         } else {
