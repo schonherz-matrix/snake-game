@@ -10,5 +10,5 @@ int config::dimension::width = 32;
 int config::dimension::height = 26;
 
 QColor config::color::snakeBodyColor = Qt::green;
-QColor config::color::snakeHeadColor = Qt::cyan;
+QColor config::color::snakeHeadColor = Qt::white;
 QColor config::color::biteColor = Qt::red;
