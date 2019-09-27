@@ -19,7 +19,8 @@ namespace config{
     }
 
     namespace color {
-        extern QColor snakeColor;  /**< Color of the snake */
+        extern QColor snakeBodyColor;  /**< Color of the body snake */
+        extern QColor snakeHeadColor;  /**< Color of the head snake */
         extern QColor biteColor; /**< Color of the bite */
     }
 }

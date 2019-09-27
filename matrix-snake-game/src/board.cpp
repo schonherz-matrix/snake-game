@@ -7,7 +7,7 @@
 * Creates the snake with the given color, and also the bite.
 */
 Board::Board() :
-    snake(config::color::snakeColor),
+    snake(config::color::snakeBodyColor, config::color::snakeHeadColor),
     bite(config::color::biteColor) {}
 
 /**

@@ -9,5 +9,6 @@ const QUrl config::game::url("https://matrix-snake.sch.bme.hu/status");
 int config::dimension::width = 32;
 int config::dimension::height = 26;
 
-QColor config::color::snakeColor = Qt::green;
+QColor config::color::snakeBodyColor = Qt::green;
+QColor config::color::snakeHeadColor = Qt::cyan;
 QColor config::color::biteColor = Qt::red;

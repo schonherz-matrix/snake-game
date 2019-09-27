@@ -5,8 +5,9 @@
 #include <QDebug>
 #include "bite.h"
 
-Snake::Snake(QColor color) :
-    color(color) {}
+Snake::Snake(QColor bodyColor, QColor headColor) :
+    bodyColor(bodyColor),
+    headColor(headColor){}
 
 /**
 * Initializes the head of the snake in the given points, below parts pointing down.
@@ -135,8 +136,11 @@ bool Snake::advance(int x, int y) {
 * Paints each point of the snake.
 */
 void Snake::paint(QPainter *painter) {
-    painter->setPen(QPen(color, 1));
-    for (int i = 0; i < body.size(); i++) {
+    painter->setPen(QPen(headColor, 1));
+    painter->drawPoint(body[0].x(), body[0].y());
+
+    painter->setPen(QPen(bodyColor, 1));
+    for (int i = 1; i < body.size(); i++) {
         painter->drawPoint(body[i].x(), body[i].y());
     }
 }

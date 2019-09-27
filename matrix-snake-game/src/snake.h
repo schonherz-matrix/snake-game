@@ -14,14 +14,15 @@ class Snake : public QObject{
 
 private:
     std::deque<QPoint> body;
-    QColor color;
+    QColor bodyColor;
+    QColor headColor;
     Bite* bite;
 
 signals:
     void hitMyself();
 
 public:
-    Snake(QColor color);
+    Snake(QColor bodyColor, QColor headColor);
     void init(int x, int y, unsigned length);
     void clean();
 

@@ -7,6 +7,7 @@
 #include <QVariantMap>
 #include <QNetworkReply>
 #include <QGraphicsPixmapItem>
+#include <QTemporaryDir>
 #include "config.h"
 #include "direction.h"
 #include <SFML/Audio.hpp>
@@ -49,11 +50,19 @@ MatrixScene::MatrixScene(QObject *parent)
     transmitter.sendFrame(frame);
 
     // init sound
-    if (soundBuffer.loadFromFile("resources/bite.wav")) {
-        qDebug() << "Sound loaded successfully!\n";
-    } else {
-        qDebug() << "Could not load sound!\n";
+    QTemporaryDir tempDir;
+    if (tempDir.isValid()) {
+      const QString tempFile = tempDir.path() + "/bite.wav";
+      if (QFile::copy(":/sounds/bite.wav", tempFile)) {
+          if (soundBuffer.loadFromFile(tempFile.toStdString())) {
+              qDebug() << "Sound loaded successfully!\n";
+          } else {
+              qDebug() << "Could not load sound!\n";
+          }
+      }
     }
+
+
     biteSound.setBuffer(soundBuffer);
     connect(&board, &Board::biteTaken, this, &MatrixScene::playBiteSound);
 }
@@ -104,6 +113,11 @@ void MatrixScene::makeMove(QNetworkReply *reply) {
     if (reply->error()) {
         qDebug() << "Error occured in request:\n";
         qDebug() << reply->errorString() << "\n";
+
+        board.move(this->currentDir);
+
+        render(&painter);
+        transmitter.sendFrame(frame);
         return;
     }
 
