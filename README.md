@@ -15,18 +15,10 @@ Mielőtt elindítjuk az emulátort, ne felejtsük el a gépünk loopback interf�
 
 `sudo ip a a 10.6.23.45/16 dev lo`
 
+Hogy működjön a háttérzene, ahhoz a `matrix-snake-game/resources/` mappába töltsd le innen a [háttérzenét](https://drive.google.com/open?id=1Y8ND9VipLA1ZuH8ZzISOxZ_8zBqVb9Yb).
+
 ### Emulátor
 Ha az emulátort szeretnénk használni, először azt is le kell fordítanunk. Ezt egyszerűen megtehetjük a QtCreator segítségével, de ha parancssorból szeretnénk csinálni, akkor itt is -- hasonlóan a játékhoz -- két parancs segítségével csinálhatjuk ezt meg: `qmake`, majd `make`.
-
-### SFML
-Bővebben az SFML-ről a GitHub oldalukon olvashatsz, itt: [SFML](https://github.com/SFML/SFML)
-
-Nagyon röviden, ami nekünk kell: kizárólag a zene és hangeffektek lejátszása miatt van szükségünk erre a projektre. Ha nem szeretnéd ezt is parancssorból fordítani, a legegyszerűbb, ha az egyik tutorialjuk segítségével telepíted a gépedre. Ha mégis inkább maradnál a parancssoros fordítás mellett, azt legeslegegyszerűbben két parancs kiadásával teheted meg: `cmake .`, majd ezt követően `make`.
-
-(TODO: Windowson is tesztelni)
-
-!!!FONTOS!!!: egyelőre nem teljesen értem miért, de a wav fájlok lejátszása esetén hiába a default valami csatlakoztatott eszköz, nem ott akarja lejátszani a hangokat, hanem a beépített hangszórón keresztül. Ennek még utána kell nézni, hogy miért!
-
 
 ## Játék indítása
 Navigáljunk át az `./emu/emu` mappába, ott indítsuk el az emulátort:
@@ -45,3 +37,4 @@ cd ../../matrix-snake-game
 ## Köszönetnyílvánítás
 
 Az alma evésekor lejátszódó hangeffektért köszönet Simon Craggs-nek.
+A háttér zene: LukHash - Let's Play

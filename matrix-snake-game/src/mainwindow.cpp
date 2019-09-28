@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->scale(10, 10);
     scene.setSlider(ui->slider);
     scene.setGrowthSwitch(ui->growthButton);
+    scene.setMusicSwitch(ui->musicCheckBox);
+    scene.setSFXSwitch(ui->sfxCheckBox);
 }
 
 MainWindow::~MainWindow()

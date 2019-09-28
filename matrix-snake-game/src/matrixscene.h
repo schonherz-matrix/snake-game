@@ -11,8 +11,10 @@
 #include <QNetworkAccessManager>
 #include <QCheckBox>
 #include "board.h"
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 #include <QSlider>
-#include <SFML/Audio.hpp>
+#include <QSoundEffect>
 
 
 class MatrixScene : public QGraphicsScene {
@@ -22,6 +24,8 @@ public:
     MatrixScene(QObject *parent = nullptr);
     void setSlider(QSlider* speedSlider);
     void setGrowthSwitch(QCheckBox* button);
+    void setMusicSwitch(QCheckBox* button);
+    void setSFXSwitch(QCheckBox* button);
 
 public slots:
     void endGame();
@@ -29,6 +33,8 @@ public slots:
     void resetTimerInterval(int time);
     void timerTick();
     void playBiteSound();
+    void stopMusic();
+    void switchPauseMusic(int state);
 
 private:
     QImage frame;
@@ -38,12 +44,17 @@ private:
     QTimer timer;
     bool gameOver = false;
     Direction currentDir;
-    sf::SoundBuffer soundBuffer;
-    sf::Sound biteSound;
+
+    QSoundEffect biteSound;
+    QMediaPlaylist playlist;
+    QMediaPlayer music;
+    int musicVolume;
 
     Board board;
     QSlider* speedSlider;
     QCheckBox* growthButton;
+    QCheckBox* musicButton;
+    QCheckBox* sfxButton;
 
     Direction oppositeDir(Direction);
 };

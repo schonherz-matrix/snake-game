@@ -8,9 +8,9 @@
 #include <QNetworkReply>
 #include <QGraphicsPixmapItem>
 #include <QTemporaryDir>
+#include <QPropertyAnimation>
 #include "config.h"
 #include "direction.h"
-#include <SFML/Audio.hpp>
 
 
 MatrixScene::MatrixScene(QObject *parent)
@@ -20,8 +20,9 @@ MatrixScene::MatrixScene(QObject *parent)
             QImage::Format_RGB888),
       painter(&frame),
       timer(),
-      soundBuffer(),
-      biteSound()
+      biteSound(),
+      playlist(),
+      music()
 {
 
     // set BG
@@ -50,7 +51,7 @@ MatrixScene::MatrixScene(QObject *parent)
     transmitter.sendFrame(frame);
 
     // init sound
-    QTemporaryDir tempDir;
+    /*QTemporaryDir tempDir;
     if (tempDir.isValid()) {
       const QString tempFile = tempDir.path() + "/bite.wav";
       if (QFile::copy(":/sounds/bite.wav", tempFile)) {
@@ -63,28 +64,37 @@ MatrixScene::MatrixScene(QObject *parent)
     }
 
 
-    biteSound.setBuffer(soundBuffer);
+    biteSound.setBuffer(soundBuffer);*/
+    biteSound.setSource(QUrl("qrc:/sounds/bite.wav"));
     connect(&board, &Board::biteTaken, this, &MatrixScene::playBiteSound);
+
+    playlist.addMedia(QUrl("qrc:/sounds/background.mp3"));
+    playlist.setPlaybackMode(QMediaPlaylist::Loop);
+
+    music.setPlaylist(&playlist);
+    this->musicVolume = 50;
+    music.setVolume(this->musicVolume);
+    music.play();
 }
 
 /**
 * Ends the game: kills the timer, prints out a big "Game over" sign
 */
 void MatrixScene::endGame() {
-    qDebug() << "Ending game...\n";
+    //qDebug() << "Ending game...\n";
 
     gameOver = true;
     timer.stop();
-    qDebug() << "Timer killed.\n";
+    //qDebug() << "Timer killed.\n";
 
     QPixmap pix;
     if (board.isWin()) {
         if(pix.load(":/images/win.png")){
             addPixmap(pix);
-            qDebug() << "Pixmap added.\n";
+            //qDebug() << "Pixmap added.\n";
             render(&painter);
             transmitter.sendFrame(frame);
-            qDebug() << "Now you should see it on the emulator.\n";
+            //qDebug() << "Now you should see it on the emulator.\n";
 
         } else {
             qDebug() << "Error while loading pixmap!";
@@ -92,15 +102,17 @@ void MatrixScene::endGame() {
     } else {
         if(pix.load(":/images/gameover.png")){
             addPixmap(pix);
-            qDebug() << "Pixmap added.\n";
+            //qDebug() << "Pixmap added.\n";
             render(&painter);
             transmitter.sendFrame(frame);
-            qDebug() << "Now you should see it on the emulator.\n";
+            //qDebug() << "Now you should see it on the emulator.\n";
 
         } else {
             qDebug() << "Error while loading pixmap!";
         }
     }
+
+    this->stopMusic();
 }
 
 /**
@@ -237,12 +249,53 @@ void MatrixScene::setGrowthSwitch(QCheckBox *button) {
 }
 
 /**
+* Sets the music switch of the window.
+*
+* @param button
+*/
+void MatrixScene::setMusicSwitch(QCheckBox *button) {
+    this->musicButton = button;
+    connect(this->musicButton, &QCheckBox::stateChanged, this, &MatrixScene::switchPauseMusic);
+}
+
+/**
+* Sets the sfx switch of the window.
+*
+* @param button
+*/
+void MatrixScene::setSFXSwitch(QCheckBox *button) {
+    this->sfxButton = button;
+}
+
+/**
 * Plays bite sound.
 */
 void MatrixScene::playBiteSound() {
-    biteSound.setBuffer(soundBuffer);
-    biteSound.play();
+    //biteSound.setBuffer(soundBuffer);
+    if (sfxButton->checkState() == Qt::Checked) {
+        biteSound.play();
+    }
 }
+
+/**
+* Stops playing music.
+*/
+void MatrixScene::stopMusic() {
+    music.stop();
+    playlist.clear();
+}
+
+void MatrixScene::switchPauseMusic(int state) {
+    if (state == Qt::Checked) {
+        playlist.addMedia(QUrl("qrc:/sounds/background.mp3"));
+        playlist.setPlaybackMode(QMediaPlaylist::Loop);
+        music.play();
+    } else {
+        music.stop();
+        playlist.clear();
+    }
+}
+
 
 /**
 * Main event loop. On every tick, if it's not game over yet,
