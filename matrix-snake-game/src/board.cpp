@@ -66,6 +66,13 @@ void Board::snakeHitItself() {
     emit finished();
 }
 
+/**
+* Sets the snake's growth
+*/
+void Board::setSnakeGrowth(int state) {
+    this->snake.setGrowth(state == Qt::Checked);
+}
+
 /** Drawing functions */
 
 QRectF Board::boundingRect() const {

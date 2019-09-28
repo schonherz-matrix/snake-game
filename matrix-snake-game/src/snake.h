@@ -17,6 +17,7 @@ private:
     QColor bodyColor;
     QColor headColor;
     Bite* bite;
+    bool growTwo;
 
 signals:
     void hitMyself();
@@ -30,7 +31,8 @@ public:
     bool collides(int x, int y);
     void setBite(Bite* bite);
     int getLength();
-    bool advance(int x, int y);
+    bool advance(int x, int y, Direction dir);
+    void setGrowth(bool growTwo);
 
     void paint(QPainter *painter);
 

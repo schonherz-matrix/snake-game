@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QList>
 #include <QNetworkAccessManager>
+#include <QCheckBox>
 #include "board.h"
 #include <QSlider>
 #include <SFML/Audio.hpp>
@@ -19,7 +20,8 @@ class MatrixScene : public QGraphicsScene {
 
 public:
     MatrixScene(QObject *parent = nullptr);
-    void setSlider(QSlider* slider);
+    void setSlider(QSlider* speedSlider);
+    void setGrowthSwitch(QCheckBox* button);
 
 public slots:
     void endGame();
@@ -40,7 +42,8 @@ private:
     sf::Sound biteSound;
 
     Board board;
-    QSlider* slider;
+    QSlider* speedSlider;
+    QCheckBox* growthButton;
 
     Direction oppositeDir(Direction);
 };

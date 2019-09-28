@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(&scene);
     ui->graphicsView->scale(10, 10);
     scene.setSlider(ui->slider);
+    scene.setGrowthSwitch(ui->growthButton);
 }
 
 MainWindow::~MainWindow()

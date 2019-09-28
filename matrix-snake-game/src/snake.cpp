@@ -7,7 +7,8 @@
 
 Snake::Snake(QColor bodyColor, QColor headColor) :
     bodyColor(bodyColor),
-    headColor(headColor){}
+    headColor(headColor),
+    growTwo(false){}
 
 /**
 * Initializes the head of the snake in the given points, below parts pointing down.
@@ -42,33 +43,33 @@ bool Snake::move(Direction dir) {
         case Direction::UP:
             // if snake is already on the top
             if (body[0].y() == 0) {
-                return advance(body[0].x(), config::dimension::height-1);
+                return advance(body[0].x(), config::dimension::height-1, dir);
             } else {
-                return advance(body[0].x(), body[0].y()-1);
+                return advance(body[0].x(), body[0].y()-1, dir);
             }
 
         case Direction::DOWN:
             // if snake is already on the bottom
             if (body[0].y() == config::dimension::height-1) {
-                return advance(body[0].x(), 0);
+                return advance(body[0].x(), 0, dir);
             } else {
-                return advance(body[0].x(), body[0].y()+1);
+                return advance(body[0].x(), body[0].y()+1, dir);
             }
 
         case Direction::LEFT:
             // if snake is already on the left
             if (body[0].x() == 0) {
-                return advance(config::dimension::width-1, body[0].y());
+                return advance(config::dimension::width-1, body[0].y(), dir);
             } else {
-                return advance(body[0].x()-1, body[0].y());
+                return advance(body[0].x()-1, body[0].y(), dir);
             }
 
         case Direction::RIGHT:
             // if snake is already on the right
             if (body[0].x() == config::dimension::width-1) {
-                return advance(0, body[0].y());
+                return advance(0, body[0].y(), dir);
             } else {
-                return advance(body[0].x()+1, body[0].y());
+                return advance(body[0].x()+1, body[0].y(), dir);
             }
     }
 
@@ -107,6 +108,20 @@ int Snake::getLength() {
 }
 
 /**
+* Sets if the snake should grow two or not.
+*
+* @param growTwo
+*/
+void Snake::setGrowth(bool growTwo) {
+    if (growTwo) {
+        qDebug() << "CHANGED: snake grows now twice as fast.";
+    } else {
+        qDebug() << "CHANGED: snake grows now one length only.";
+    }
+    this->growTwo = growTwo;
+}
+
+/**
 * Tries to advance to the new position. If it collides with itself, then emits a signal
 * indicating game over. If it hits a bite, then it eats it.
 *
@@ -114,7 +129,7 @@ int Snake::getLength() {
 * @param y: the new y position of the snake
 * @return true, if the snake hit a bite.
 */
-bool Snake::advance(int x, int y) {
+bool Snake::advance(int x, int y, Direction dir) {
     qDebug() << "Next coords: x = " << x << "; y = " << y << "\n";
 
     if (this->collides(x, y)) {
@@ -123,6 +138,24 @@ bool Snake::advance(int x, int y) {
     } else {
         if (this->bite->collide(x, y)) {
             body.push_front(QPoint(x, y));
+
+            if (this->growTwo) {
+                switch (dir) {
+                    case Direction::UP :
+                        body.push_front(QPoint(x, y-1));
+                        break;
+                    case Direction::DOWN :
+                        body.push_front(QPoint(x, y+1));
+                        break;
+                    case Direction::RIGHT:
+                        body.push_front(QPoint(x+1, y));
+                        break;
+                    case Direction::LEFT :
+                        body.push_front(QPoint(x-1, y));
+                        break;
+                }
+            }
+
             return true;
         } else {
             body.push_front(QPoint(x, y));

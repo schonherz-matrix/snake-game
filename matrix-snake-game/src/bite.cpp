@@ -32,9 +32,9 @@ void Bite::regenerate(Snake &snake) {
     } while (newY == this->y());
 
     while (snake.collides(newX, newY)
-           || snake.collides(newX, newY)
-           || snake.collides(newX, newY)
-           || snake.collides(newX, newY)) {
+           || snake.collides(newX, newY-1)
+           || snake.collides(newX-1, newY)
+           || snake.collides(newX-1, newY-1)) {
 
         if (newX == config::dimension::width-1) {
             newX = 1;

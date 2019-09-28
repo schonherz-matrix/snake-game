@@ -18,6 +18,7 @@ signals:
 
 public slots:
     void snakeHitItself();
+    void setSnakeGrowth(int state);
 
 public:
     Board();

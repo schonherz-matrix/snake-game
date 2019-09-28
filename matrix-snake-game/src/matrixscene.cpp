@@ -217,13 +217,23 @@ void MatrixScene::resetTimerInterval(int time) {
 }
 
 /**
-* Sets the slider of the window.
+* Sets the game speed slider of the window.
 *
 * @param slider
 */
 void MatrixScene::setSlider(QSlider *slider) {
-    this->slider = slider;
+    this->speedSlider = slider;
     connect(slider, &QSlider::valueChanged, this, &MatrixScene::resetTimerInterval);
+}
+
+/**
+* Sets the growth switch of the window.
+*
+* @param button
+*/
+void MatrixScene::setGrowthSwitch(QCheckBox *button) {
+    this->growthButton = button;
+    connect(this->growthButton, &QCheckBox::stateChanged, &this->board, &Board::setSnakeGrowth);
 }
 
 /**
@@ -242,6 +252,7 @@ void MatrixScene::timerTick() {
     if (!gameOver) {
         QNetworkRequest request(config::game::url);
         manager.get(request);
+        this->update();
     }
 }
 
