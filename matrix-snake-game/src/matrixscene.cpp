@@ -51,20 +51,6 @@ MatrixScene::MatrixScene(QObject *parent)
     transmitter.sendFrame(frame);
 
     // init sound
-    /*QTemporaryDir tempDir;
-    if (tempDir.isValid()) {
-      const QString tempFile = tempDir.path() + "/bite.wav";
-      if (QFile::copy(":/sounds/bite.wav", tempFile)) {
-          if (soundBuffer.loadFromFile(tempFile.toStdString())) {
-              qDebug() << "Sound loaded successfully!\n";
-          } else {
-              qDebug() << "Could not load sound!\n";
-          }
-      }
-    }
-
-
-    biteSound.setBuffer(soundBuffer);*/
     biteSound.setSource(QUrl("qrc:/sounds/bite.wav"));
     connect(&board, &Board::biteTaken, this, &MatrixScene::playBiteSound);
 
@@ -81,20 +67,15 @@ MatrixScene::MatrixScene(QObject *parent)
 * Ends the game: kills the timer, prints out a big "Game over" sign
 */
 void MatrixScene::endGame() {
-    //qDebug() << "Ending game...\n";
-
     gameOver = true;
     timer.stop();
-    //qDebug() << "Timer killed.\n";
 
     QPixmap pix;
     if (board.isWin()) {
         if(pix.load(":/images/win.png")){
             addPixmap(pix);
-            //qDebug() << "Pixmap added.\n";
             render(&painter);
             transmitter.sendFrame(frame);
-            //qDebug() << "Now you should see it on the emulator.\n";
 
         } else {
             qDebug() << "Error while loading pixmap!";
@@ -102,10 +83,8 @@ void MatrixScene::endGame() {
     } else {
         if(pix.load(":/images/gameover.png")){
             addPixmap(pix);
-            //qDebug() << "Pixmap added.\n";
             render(&painter);
             transmitter.sendFrame(frame);
-            //qDebug() << "Now you should see it on the emulator.\n";
 
         } else {
             qDebug() << "Error while loading pixmap!";
