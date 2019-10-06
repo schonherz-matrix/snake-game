@@ -15,7 +15,7 @@ Mielőtt elindítjuk az emulátort, ne felejtsük el a gépünk loopback interf�
 
 `sudo ip a a 10.6.23.45/16 dev lo`
 
-Hogy működjön a háttérzene, ahhoz a `matrix-snake-game/resources/` mappába töltsd le innen a [háttérzenét](https://drive.google.com/open?id=1Y8ND9VipLA1ZuH8ZzISOxZ_8zBqVb9Yb).
+Hogy működjön a háttérzene, ahhoz a `matrix-snake-game/resources/` mappába kell belerakni a kívánt zenét `background.mp3` néven.
 
 ### Emulátor
 Ha az emulátort szeretnénk használni, először azt is le kell fordítanunk. Ezt egyszerűen megtehetjük a QtCreator segítségével, de ha parancssorból szeretnénk csinálni, akkor itt is -- hasonlóan a játékhoz -- két parancs segítségével csinálhatjuk ezt meg: `qmake`, majd `make`.
