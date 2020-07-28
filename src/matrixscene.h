@@ -39,7 +39,7 @@ public slots:
 private:
     QImage frame;
     QPainter painter;
-    MUEBTransmitter transmitter;
+    MuebTransmitter& transmitter{MuebTransmitter::getInstance()};
     QNetworkAccessManager manager;
     QTimer timer;
     bool gameOver = false;
