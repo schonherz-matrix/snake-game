@@ -11,7 +11,7 @@
 #include <QPropertyAnimation>
 #include "config.h"
 #include "direction.h"
-
+#include <QFile>
 
 MatrixScene::MatrixScene(QObject *parent)
     : QGraphicsScene(parent),
@@ -54,13 +54,17 @@ MatrixScene::MatrixScene(QObject *parent)
     biteSound.setSource(QUrl("qrc:/sounds/bite.wav"));
     connect(&board, &Board::biteTaken, this, &MatrixScene::playBiteSound);
 
-    playlist.addMedia(QUrl("qrc:/sounds/background.mp3"));
-    playlist.setPlaybackMode(QMediaPlaylist::Loop);
+    this->backgroundMusicExists = QFile::exists(":/sounds/background.mp3")
 
-    music.setPlaylist(&playlist);
-    this->musicVolume = 50;
-    music.setVolume(this->musicVolume);
-    music.play();
+    if (this->backgroundMusicExists) {
+        playlist.addMedia(QUrl("qrc:/sounds/background.mp3"));
+        playlist.setPlaybackMode(QMediaPlaylist::Loop);
+
+        music.setPlaylist(&playlist);
+        this->musicVolume = 50;
+        music.setVolume(this->musicVolume);
+        music.play();
+    }
 }
 
 /**
@@ -260,18 +264,22 @@ void MatrixScene::playBiteSound() {
 * Stops playing music.
 */
 void MatrixScene::stopMusic() {
-    music.stop();
-    playlist.clear();
+    if (this->backgroundMusicExists) {
+        music.stop();
+        playlist.clear();
+    }
 }
 
 void MatrixScene::switchPauseMusic(int state) {
-    if (state == Qt::Checked) {
-        playlist.addMedia(QUrl("qrc:/sounds/background.mp3"));
-        playlist.setPlaybackMode(QMediaPlaylist::Loop);
-        music.play();
-    } else {
-        music.stop();
-        playlist.clear();
+    if (this->backgroundMusicExists) {
+        if (state == Qt::Checked) {
+            playlist.addMedia(QUrl("qrc:/sounds/background.mp3"));
+            playlist.setPlaybackMode(QMediaPlaylist::Loop);
+            music.play();
+        } else {
+            music.stop();
+            playlist.clear();
+        }
     }
 }
 

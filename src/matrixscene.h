@@ -43,6 +43,7 @@ private:
     QNetworkAccessManager manager;
     QTimer timer;
     bool gameOver = false;
+    bool backgroundMusicExists = false;
     Direction currentDir;
 
     QSoundEffect biteSound;

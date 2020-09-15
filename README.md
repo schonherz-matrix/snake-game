@@ -12,19 +12,19 @@ CMake 3.16
 ## Fordítás
 ### Játék
 
-A játékot az alábbi paranccsal vagy a Qt Creator segítségével fordíthatjuk le.
+A játékot az alábbi paranccsal, vagy a Qt Creator segítségével fordíthatjuk le.
 
-A játék fordításához a következő parancsot kell kiadni a gyökér mappában
+A játék fordításához a következő parancsot kell kiadni a gyökér mappában:
 
 ```bash
 cmake -B build && cmake -Dlibmueb_DIR=(libmueb cmake output) -DQt5_DIR=(qt telepítésének helye/lib/cmake/Qt5) --build build
 ```
 
-Hogy működjön a háttérzene, ahhoz a `resources/` mappába kell belerakni a kívánt zenét `background.mp3` néven.
+Hogy működjön a háttérzene, ahhoz a `resources/` mappába kell belerakni a kívánt zenét `background.mp3` néven. Ha nincs hátérzene, a játék akkor is működni fog. 
 
 ### Emulátor
 
-A fentihez hasonlóképpen fordítható külön kell letölteni a forráskódját.
+Az [emulátor](https://git.sch.bme.hu/matrix-group/emu) a fentihez hasonlóképpen fordítható. A forráskódját külön kell letölteni.
 
 ## Játék indítása
 Mielőtt elindítjuk az emulátort, ne felejtsük el a gépünk loopback interfészére felvenni a 10.6.0.0/16-os hálóból egy tetszőleges nem broadcast címet, pl. az alábbi paranccsal:
@@ -39,4 +39,3 @@ cd build
 ## Köszönetnyílvánítás
 
 Az alma evésekor lejátszódó hangeffektért köszönet Simon Craggs-nek.
-A háttér zene: LukHash - Let's Play
