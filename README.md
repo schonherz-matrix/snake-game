@@ -1,4 +1,6 @@
-# Mátrix Snake játék
+# snake-game
+
+Mátrix Snake játék
 
 ## Előfeltételek
 Qt: 5.12.4
