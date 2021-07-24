@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(
-  matrix-snake-game
+  snake-game
   HOMEPAGE_URL "kszk.bme.hu"
   LANGUAGES CXX)
 
